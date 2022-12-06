@@ -5,6 +5,7 @@ const { schoolModel } = require("./src/models/schoolSchema");
 
 const app = express();
 app.use(express.json());
+mongoose.set("strictQuery", true);
 
 app.get("/", (req, res) => {
   res.send("hello mahfuz");
@@ -15,7 +16,7 @@ app.get("/individual", async (req, res) => {
   const rollNumber = Number(roll);
   const year = req.query.year;
   try {
-    const response = await rollModel.find(
+    const response = await rollModel.findOne(
       { roll: rollNumber },
       {},
       { maxTimeMS: 1000 }
@@ -35,7 +36,7 @@ app.get("/institution", async (req, res) => {
   const year = req.query.year;
 
   schoolModel
-    .find({ eiin: eiinNumber })
+    .findOne({ eiin: eiinNumber })
     .populate("examine", "roll gpa -_id")
     .maxTimeMS(1000)
     .select({
@@ -95,13 +96,8 @@ const mongoDBUrl =
   "mongodb+srv://mahfuz:mahfuzzz@cluster0.tai23b4.mongodb.net/ssc?retryWrites=true&w=majority";
 // "mongodb+srv://admin:mahfuz@mahfuz.pute8tu.mongodb.net/scrape";
 
-console.log(process.env.MONGOURI);
-
 mongoose
-  .connect(mongoDBUrl, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(mongoDBUrl)
   .then(() => console.log("mongoDB connection successfully"))
   .catch((e) => console.log(e));
 
