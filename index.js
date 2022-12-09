@@ -2,8 +2,10 @@ const express = require("express");
 const { default: mongoose, Schema } = require("mongoose");
 const { rollModel } = require("./src/models/rollSchema");
 const { schoolModel } = require("./src/models/schoolSchema");
+const cors = require("cors");
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 mongoose.set("strictQuery", true);
 
