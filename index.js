@@ -20,8 +20,10 @@ app.get("/individual", async (req, res) => {
   try {
     const response = await rollModel.findOne(
       { roll: rollNumber },
-      {},
-      { maxTimeMS: 1000 }
+      "-_id -__v -updatedAt -createdAt",
+      {
+        maxTimeMS: 1000,
+      }
     );
     res.status(200).json({
       result: response,
